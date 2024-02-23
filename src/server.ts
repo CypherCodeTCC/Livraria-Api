@@ -1,9 +1,16 @@
-import express, { Request, Response } from "express";
+import express, { Express } from "express";
+import dotenv from "dotenv";
 
-const app = express();
+import UseRoutes from "./helpers/UseRoutes";
+import routes from "./routes";
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
+dotenv.config();
+const app: Express = express();
+
+// using routes
+const useRoutes = new UseRoutes(app);
+useRoutes.use(routes);
+
+app.use(express.json()); // permitindo json no express
 
 export default app;
