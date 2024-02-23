@@ -7,10 +7,11 @@ import routes from "./routes";
 dotenv.config();
 const app: Express = express();
 
-// using routes
+app.use(express.urlencoded({ extended: false })); // permitindo o recebimento de parâmetros
+app.use(express.json()); // permitindo json no express
+
+// usando rotas
 const useRoutes = new UseRoutes(app);
 useRoutes.use(routes);
-
-app.use(express.json()); // permitindo json no express
 
 export default app;

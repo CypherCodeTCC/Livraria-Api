@@ -9,26 +9,35 @@ datasource db {
 
 model Author {
   id   Int    @id @default(autoincrement())
-  name String
+  name String @unique
   bio  String
-  Book Book[]
+  book Book[]
 }
 
 model Genre {
   id    Int    @id @default(autoincrement())
-  name  String
+  name  String @unique
   about String
-  Book  Book[]
+  book  Book[]
 }
 
 model Book {
   id       Int    @id @default(autoincrement())
   title    String
   editor   String
-  genre    Genre  @relation(fields: [genreId], references: [id])
-  genreId  Int    @unique
   synopsis String
-  author   Author @relation(fields: [authorId], references: [id])
-  authorId Int    @unique
   price    Float
+  genre    Genre  @relation(fields: [genreId], references: [id])
+  genreId  Int    
+  author   Author @relation(fields: [authorId], references: [id])
+  authorId Int    
+  image Image? @relation(fields: [imageId], references: [id])
+  imageId Int? @unique
+}
+
+model Image {
+  id       Int    @id @default(autoincrement())
+  storageName String @unique
+  url String
+  book Book?
 }
