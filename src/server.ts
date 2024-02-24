@@ -1,6 +1,10 @@
+// Server configs
+
+// Imports Libs
 import express, { Express } from "express";
 import dotenv from "dotenv";
 
+// Imports Modules
 import UseRoutes from "./helpers/UseRoutes";
 import routes from "./routes";
 

@@ -1,3 +1,6 @@
+// init server
+
+// Imports modules
 import app from "./server";
 
 const PORT: number = 3001;
