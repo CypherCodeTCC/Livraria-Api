@@ -2,8 +2,8 @@ import { Router } from "express";
 
 // Rotas
 import booksRoute from "./allRoutes/booksRoute";
-import genreRoute from "./allRoutes/genreRoute";
+import genresRoute from "./allRoutes/genresRoute";
 
-const routes: Router[] = [booksRoute, genreRoute];
+const routes: Router[] = [booksRoute, genresRoute];
 
 export default routes;

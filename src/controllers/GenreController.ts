@@ -38,6 +38,54 @@ class GenreController {
       prisma.$disconnect();
     }
   }
+
+  static async list(req: Request, res: Response): Promise<Response> {
+    try {
+      const data = await prisma.genre.findMany({ take: 5 });
+
+      return res.status(200).json(data);
+    } catch (e) {
+      return errorCatch(e, res);
+    } finally {
+      prisma.$disconnect();
+    }
+  }
+
+  static async update(req: Request, res: Response): Promise<Response> {
+    try {
+      delete req.body.id; // garantindo que não tenha id
+
+      const id = Number(req.params.id);
+
+      const data = await prisma.genre.update({
+        where: {
+          id,
+        },
+        data: {
+          name: req.body.name,
+          about: req.body.about,
+        },
+      });
+
+      return res.status(200).json(data);
+    } catch (e) {
+      return errorCatch(e, res);
+    } finally {
+      prisma.$disconnect();
+    }
+  }
+
+  static async delete(req: Request, res: Response): Promise<Response> {
+    try {
+      const id = Number(req.params.id);
+      await prisma.genre.delete({ where: { id } });
+      return res.status(204).json();
+    } catch (e) {
+      return errorCatch(e, res);
+    } finally {
+      prisma.$disconnect();
+    }
+  }
 }
 
 export default GenreController;
