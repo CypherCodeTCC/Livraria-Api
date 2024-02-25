@@ -1,5 +1,4 @@
 // Imports Libs
-import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 
@@ -10,10 +9,6 @@ const prisma = new PrismaClient();
 
 function errorCatch(e: unknown, res: Response) {
   const httpErrors = new HttpErrors(res);
-
-  if (e instanceof PrismaClientValidationError) {
-    return httpErrors.badRequest([e.message], e.name);
-  }
 
   return httpErrors.badRequest(
     ["Unexpected Error"],

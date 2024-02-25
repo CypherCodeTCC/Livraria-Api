@@ -7,12 +7,11 @@ import prisma from "../database/prisma";
 type Data = {
   id?: number;
   name: string;
-  about: string;
+  bio: string;
 };
 
-class GenreModel {
+class AuthorModel {
   static async create(body: Data): Promise<Data> {
-    // Estrutura dos dados
     const dataSchema = z.object({
       name: z
         .string({
@@ -20,30 +19,24 @@ class GenreModel {
           required_error: "Name is required",
         })
         .min(3, "Name must be min 3 character"),
-      about: z
+      bio: z
         .string({
-          invalid_type_error: "About must be string",
-          required_error: "About is required",
+          invalid_type_error: "Bio must be string",
+          required_error: "Bio is required",
         })
-        .min(3, "About must be min 10 character"),
+        .min(10, "Bio must be min 10 character"),
     });
-    dataSchema.parse(body); // validando dados
 
-    const data = await prisma.genre.create({
-      data: body,
-    });
+    const data = await prisma.author.create({ data: dataSchema.parse(body) });
 
     return data;
   }
 
   static async list(): Promise<Data[]> {
-    const data = await prisma.genre.findMany();
-
-    return data;
+    return await prisma.author.findMany();
   }
 
   static async update(id: number, body: Data): Promise<Data> {
-    // Estrutura dos dados
     const dataSchema = z.object({
       name: z
         .string({
@@ -51,14 +44,15 @@ class GenreModel {
         })
         .min(3, "Name must be min 3 character")
         .optional(),
-      about: z
+      bio: z
         .string({
-          invalid_type_error: "About must be string",
+          invalid_type_error: "Bio must be string",
         })
-        .min(3, "About must be min 10 character")
+        .min(10, "Bio must be min 10 character")
         .optional(),
     });
-    const data = await prisma.genre.update({
+
+    const data = await prisma.author.update({
       where: {
         id,
       },
@@ -67,10 +61,6 @@ class GenreModel {
 
     return data;
   }
-
-  static async delete(id: number): Promise<void> {
-    await prisma.genre.delete({ where: { id } });
-  }
 }
 
-export default GenreModel;
+export default AuthorModel;

@@ -1,6 +1,6 @@
 // Imports Libs
 import { Request, Response } from "express";
-import { PrismaClientValidationError } from "@prisma/client/runtime/library";
+import { ZodError } from "zod";
 
 // Imports Modules
 import HttpErrors from "../errors/HttpErrors";
@@ -9,15 +9,12 @@ import GenreModel from "../models/GenreModel";
 function errorCatch(e: unknown, res: Response) {
   const httpErrors = new HttpErrors(res);
 
-  if (e instanceof PrismaClientValidationError) {
+  // ser for um erro de validação do ZOD
+  if (e instanceof ZodError) {
     return httpErrors.badRequest(
-      ["ValidationError"],
-      "Check that the data is correct",
+      e.errors.map((error) => error.message),
+      e.name,
     );
-  }
-
-  if (e instanceof TypeError) {
-    return httpErrors.badRequest(["ValidationError"], e.message);
   }
 
   return httpErrors.badRequest(

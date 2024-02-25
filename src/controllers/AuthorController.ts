@@ -1,18 +1,20 @@
 // Imports Libs
-import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { PrismaClientValidationError } from "@prisma/client/runtime/library";
+import { ZodError } from "zod";
 
 // Imports Modules
 import HttpErrors from "../errors/HttpErrors";
-
-const prisma = new PrismaClient();
+import AuthorModel from "../models/AuthorModel";
 
 function errorCatch(e: unknown, res: Response) {
   const httpErrors = new HttpErrors(res);
 
-  if (e instanceof PrismaClientValidationError) {
-    return httpErrors.badRequest([e.message], e.name);
+  // ser for um erro de validação do ZOD
+  if (e instanceof ZodError) {
+    return httpErrors.badRequest(
+      e.errors.map((error) => error.message),
+      e.name,
+    );
   }
 
   return httpErrors.badRequest(
@@ -24,30 +26,21 @@ function errorCatch(e: unknown, res: Response) {
 class AuthorController {
   static async create(req: Request, res: Response): Promise<Response> {
     try {
-      const data = await prisma.author.create({
-        data: {
-          name: req.body.name,
-          bio: req.body.bio,
-        },
-      });
+      const data = await AuthorModel.create(req.body);
 
       return res.status(201).json(data);
     } catch (e) {
       return errorCatch(e, res);
-    } finally {
-      prisma.$disconnect();
     }
   }
 
   static async list(req: Request, res: Response): Promise<Response> {
     try {
-      const data = await prisma.author.findMany();
+      const data = await AuthorModel.list();
 
       return res.status(200).json(data);
     } catch (e) {
       return errorCatch(e, res);
-    } finally {
-      prisma.$disconnect();
     }
   }
 
@@ -57,35 +50,23 @@ class AuthorController {
 
       const id = Number(req.params.id);
 
-      const data = await prisma.genre.update({
-        where: {
-          id,
-        },
-        data: {
-          name: req.body.name,
-          about: req.body.about,
-        },
-      });
+      const data = await AuthorModel.update(id, req.body);
 
       return res.status(200).json(data);
     } catch (e) {
       return errorCatch(e, res);
-    } finally {
-      prisma.$disconnect();
     }
   }
 
-  static async delete(req: Request, res: Response): Promise<Response> {
-    try {
-      const id = Number(req.params.id);
-      await prisma.genre.delete({ where: { id } });
-      return res.status(204).json();
-    } catch (e) {
-      return errorCatch(e, res);
-    } finally {
-      prisma.$disconnect();
-    }
-  }
+  // static async delete(req: Request, res: Response): Promise<Response> {
+  //   try {
+  //     const id = Number(req.params.id);
+  //     await AuthorModel.delete(id);
+  //     return res.status(204).json();
+  //   } catch (e) {
+  //     return errorCatch(e, res);
+  //   }
+  // }
 }
 
 export default AuthorController;
