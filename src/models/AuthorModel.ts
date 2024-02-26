@@ -61,6 +61,14 @@ class AuthorModel {
 
     return data;
   }
+
+  static async delete(id: number) {
+    await prisma.author.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }
 
 export default AuthorModel;

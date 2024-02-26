@@ -58,15 +58,15 @@ class AuthorController {
     }
   }
 
-  // static async delete(req: Request, res: Response): Promise<Response> {
-  //   try {
-  //     const id = Number(req.params.id);
-  //     await AuthorModel.delete(id);
-  //     return res.status(204).json();
-  //   } catch (e) {
-  //     return errorCatch(e, res);
-  //   }
-  // }
+  static async delete(req: Request, res: Response): Promise<Response> {
+    try {
+      const id = Number(req.params.id);
+      await AuthorModel.delete(id);
+      return res.status(204).json();
+    } catch (e) {
+      return errorCatch(e, res);
+    }
+  }
 }
 
 export default AuthorController;
