@@ -1,17 +1,12 @@
 // Imports Libs
 import z from "zod";
+import { Author } from "@prisma/client";
 
 // Imports Modules
 import prisma from "../database/prisma";
 
-type Data = {
-  id?: number;
-  name: string;
-  bio: string;
-};
-
 class AuthorModel {
-  static async create(body: Data): Promise<Data> {
+  static async create(body: Author): Promise<Author> {
     const dataSchema = z.object({
       name: z
         .string({
@@ -32,11 +27,11 @@ class AuthorModel {
     return data;
   }
 
-  static async list(): Promise<Data[]> {
+  static async list(): Promise<Author[]> {
     return await prisma.author.findMany();
   }
 
-  static async update(id: number, body: Data): Promise<Data> {
+  static async update(id: number, body: Author): Promise<Author> {
     const dataSchema = z.object({
       name: z
         .string({
@@ -62,7 +57,7 @@ class AuthorModel {
     return data;
   }
 
-  static async delete(id: number) {
+  static async delete(id: number): Promise<void> {
     await prisma.author.delete({
       where: {
         id,

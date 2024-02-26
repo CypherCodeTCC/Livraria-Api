@@ -1,17 +1,12 @@
 // Imports Libs
 import z from "zod";
+import { Genre } from "@prisma/client";
 
 // Imports Modules
 import prisma from "../database/prisma";
 
-type Data = {
-  id?: number;
-  name: string;
-  about: string;
-};
-
 class GenreModel {
-  static async create(body: Data): Promise<Data> {
+  static async create(body: Genre): Promise<Genre> {
     // Estrutura dos dados
     const dataSchema = z.object({
       name: z
@@ -36,13 +31,13 @@ class GenreModel {
     return data;
   }
 
-  static async list(): Promise<Data[]> {
+  static async list(): Promise<Genre[]> {
     const data = await prisma.genre.findMany();
 
     return data;
   }
 
-  static async update(id: number, body: Data): Promise<Data> {
+  static async update(id: number, body: Genre): Promise<Genre> {
     // Estrutura dos dados
     const dataSchema = z.object({
       name: z
