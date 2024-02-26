@@ -1,29 +1,9 @@
 // Imports Libs
 import { Request, Response } from "express";
-import { ZodError } from "zod";
 
 // Imports Modules
-import HttpErrors from "../errors/HttpErrors";
 import BookModel from "../models/BookModel";
-
-function errorCatch(e: unknown, res: Response) {
-  const httpErrors = new HttpErrors(res);
-
-  // ser for um erro de validação do ZOD
-  if (e instanceof ZodError) {
-    return httpErrors.badRequest(
-      e.errors.map((error) => error.message),
-      e.name,
-    );
-  }
-
-  console.log(e);
-
-  return httpErrors.badRequest(
-    ["Unexpected Error"],
-    "Please contact developer system!",
-  );
-}
+import handleErrors from "../errors/handleErrors";
 
 class BookController {
   static async create(req: Request, res: Response): Promise<Response> {
@@ -31,7 +11,7 @@ class BookController {
       const data = await BookModel.create(req.body);
       return res.status(201).json(data);
     } catch (e) {
-      return errorCatch(e, res);
+      return handleErrors(e, res);
     }
   }
 
@@ -50,7 +30,7 @@ class BookController {
 
       return res.status(200).json(data);
     } catch (e) {
-      return errorCatch(e, res);
+      return handleErrors(e, res);
     }
   }
 
@@ -62,7 +42,7 @@ class BookController {
       const data = await BookModel.update(id, req.body);
       return res.status(200).json(data);
     } catch (e) {
-      return errorCatch(e, res);
+      return handleErrors(e, res);
     }
   }
 
@@ -72,7 +52,7 @@ class BookController {
       await BookModel.delete(id);
       return res.status(204).json();
     } catch (e) {
-      return errorCatch(e, res);
+      return handleErrors(e, res);
     }
   }
 }

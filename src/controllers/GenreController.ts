@@ -1,27 +1,9 @@
 // Imports Libs
 import { Request, Response } from "express";
-import { ZodError } from "zod";
 
 // Imports Modules
-import HttpErrors from "../errors/HttpErrors";
+import handleErrors from "../errors/handleErrors";
 import GenreModel from "../models/GenreModel";
-
-function errorCatch(e: unknown, res: Response) {
-  const httpErrors = new HttpErrors(res);
-
-  // ser for um erro de validação do ZOD
-  if (e instanceof ZodError) {
-    return httpErrors.badRequest(
-      e.errors.map((error) => error.message),
-      e.name,
-    );
-  }
-
-  return httpErrors.badRequest(
-    ["Unexpected Error"],
-    "Please contact developer system!",
-  );
-}
 
 class GenreController {
   static async create(req: Request, res: Response): Promise<Response> {
@@ -30,7 +12,7 @@ class GenreController {
 
       return res.status(201).json(data);
     } catch (e) {
-      return errorCatch(e, res);
+      return handleErrors(e, res);
     }
   }
 
@@ -40,7 +22,7 @@ class GenreController {
 
       return res.status(200).json(data);
     } catch (e) {
-      return errorCatch(e, res);
+      return handleErrors(e, res);
     }
   }
 
@@ -54,7 +36,7 @@ class GenreController {
 
       return res.status(200).json(data);
     } catch (e) {
-      return errorCatch(e, res);
+      return handleErrors(e, res);
     }
   }
 
@@ -64,7 +46,7 @@ class GenreController {
       await GenreModel.delete(id);
       return res.status(204).json();
     } catch (e) {
-      return errorCatch(e, res);
+      return handleErrors(e, res);
     }
   }
 }
