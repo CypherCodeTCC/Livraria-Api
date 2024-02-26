@@ -31,13 +31,13 @@ model Book {
   genreId  Int    
   author   Author @relation(fields: [authorId], references: [id])
   authorId Int    
-  image Image? @relation(fields: [imageId], references: [id])
-  imageId Int? @unique
+  image Image?
 }
 
 model Image {
   id       Int    @id @default(autoincrement())
   storageName String @unique
   url String
-  book Book?
+  book Book @relation(fields: [bookId], references: [id])
+  bookId Int  @unique
 }
