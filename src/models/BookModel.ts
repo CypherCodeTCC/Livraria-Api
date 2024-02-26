@@ -5,20 +5,6 @@ import z from "zod";
 import prisma from "../database/prisma";
 import { Book } from "@prisma/client";
 
-// model Book {
-//   id       Int    @id @default(autoincrement())
-//   title    String
-//   editor   String
-//   synopsis String
-//   price    Float
-//   genre    Genre  @relation(fields: [genreId], references: [id])
-//   genreId  Int
-//   author   Author @relation(fields: [authorId], references: [id])
-//   authorId Int
-//   image Image? @relation(fields: [imageId], references: [id])
-//   imageId Int? @unique
-// }
-
 class BookModel {
   static async create(body: Book): Promise<Book> {
     const dataSchema = z.object({
@@ -63,14 +49,69 @@ class BookModel {
   static async list(
     page: number,
     take: number,
-  ): Promise<{ page: number; books: Book[] }> {
+  ): Promise<{ totalPages: number; page: number; books: Book[] }> {
     // (page * take - take)
     const skip: number = page * take - take;
-    const data = await prisma.book.findMany({ take, skip });
+    const totalPages = (await prisma.book.count()) / take; // total de páginas
+    const data = await prisma.book.findMany({
+      take,
+      skip,
+      include: { author: {}, genre: {} },
+    });
     return {
+      totalPages,
       page,
       books: data,
     };
+  }
+
+  static async update(id: number, body: Book): Promise<Book> {
+    const dataSchema = z.object({
+      title: z
+        .string({
+          invalid_type_error: "title must be string",
+        })
+        .min(3, "title must be min 3 character")
+        .optional(),
+      editor: z
+        .string({
+          invalid_type_error: "editor must be string",
+        })
+        .min(3, "editor must be min 3 character")
+        .optional(),
+      synopsis: z
+        .string({
+          invalid_type_error: "synopsis must be string",
+        })
+        .min(3, "synopsis must be min 3 character")
+        .optional(),
+      price: z
+        .number({
+          invalid_type_error: "price must be number",
+        })
+        .optional(),
+      genreId: z
+        .number({
+          invalid_type_error: "genreId must be number",
+        })
+        .optional(),
+      authorId: z
+        .number({
+          invalid_type_error: "authorId must be number",
+        })
+        .optional(),
+    });
+
+    const data = await prisma.book.update({
+      where: { id },
+      data: dataSchema.parse(body),
+    });
+
+    return data;
+  }
+
+  static async delete(id: number): Promise<void> {
+    await prisma.book.delete({ where: { id } });
   }
 }
 

@@ -53,6 +53,28 @@ class BookController {
       return errorCatch(e, res);
     }
   }
+
+  static async update(req: Request, res: Response): Promise<Response> {
+    try {
+      delete req.body.id;
+
+      const id = Number(req.params.id);
+      const data = await BookModel.update(id, req.body);
+      return res.status(200).json(data);
+    } catch (e) {
+      return errorCatch(e, res);
+    }
+  }
+
+  static async delete(req: Request, res: Response): Promise<Response> {
+    try {
+      const id = Number(req.params.id);
+      await BookModel.delete(id);
+      return res.status(204).json();
+    } catch (e) {
+      return errorCatch(e, res);
+    }
+  }
 }
 
 export default BookController;
