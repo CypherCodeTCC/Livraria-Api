@@ -56,7 +56,7 @@ class BookModel {
     const data = await prisma.book.findMany({
       take,
       skip,
-      include: { author: {}, genre: {} },
+      include: { author: {}, genre: {}, image: {} },
     });
     return {
       totalPages,
@@ -112,6 +112,10 @@ class BookModel {
 
   static async delete(id: number): Promise<void> {
     await prisma.book.delete({ where: { id } });
+  }
+
+  static async getOne(id: number): Promise<Book | null> {
+    return await prisma.book.findFirst({ where: { id } });
   }
 }
 
