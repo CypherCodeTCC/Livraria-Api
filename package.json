@@ -2,10 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/index.js",
   "scripts": {
+    "start": "node ./dist/index.js",
     "dev": "nodemon ./src/index.ts",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "buildTS": "tsc --build"
   },
   "keywords": [],
   "author": "",
