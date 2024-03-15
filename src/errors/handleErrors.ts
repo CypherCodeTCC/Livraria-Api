@@ -15,6 +15,7 @@ export default function handleErrors(e: unknown, res: Response) {
       e.name,
     );
   }
+
   console.log(e);
 
   return httpErrors.badRequest(

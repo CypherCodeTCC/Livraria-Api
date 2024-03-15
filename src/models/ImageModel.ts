@@ -7,7 +7,6 @@ import supabase from "../database/supabase";
 const BUCKET_NAME: string = "images";
 
 class ImageModel {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static async create(file: Express.Multer.File, bookId: number) {
     // Upload image
     const randomNumber: number = Math.floor(Math.random() * 1000);
