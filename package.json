@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "dev": "nodemon ./src/index.ts",
+    "postinstall": "prisma generate",
     "lint": "eslint . --ext .ts",
     "buildTS": "tsc --build"
   },
