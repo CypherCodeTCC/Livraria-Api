@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon ./src/index.ts",
     "lint": "eslint . --ext .ts",
-    "buildTS": "tsc --build"
+    "build": "tsc --build"
   },
   "keywords": [],
   "author": "",
