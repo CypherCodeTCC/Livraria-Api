@@ -1,7 +1,8 @@
 // Imports Libs
+import { PrismaClient } from "@prisma/client";
 
 // Imports Modules
-import prisma from "../database/prisma";
+const prisma = new PrismaClient();
 import supabase from "../database/supabase";
 
 const BUCKET_NAME: string = "images";

@@ -1,9 +1,10 @@
 // Imports Libs
 import z from "zod";
 import { Genre } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 // Imports Modules
-import prisma from "../database/prisma";
+const prisma = new PrismaClient();
 
 class GenreModel {
   static async create(body: Genre): Promise<Genre> {

@@ -1,8 +1,11 @@
 // Import Libs
 import z from "zod";
+import { PrismaClient } from "@prisma/client";
 
 // Import Modules
-import prisma from "../database/prisma";
+
+const prisma = new PrismaClient();
+
 import { Book } from "@prisma/client";
 
 class BookModel {

@@ -1,9 +1,11 @@
 // Imports Libs
 import z from "zod";
 import { Author } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 // Imports Modules
-import prisma from "../database/prisma";
+
+const prisma = new PrismaClient();
 
 class AuthorModel {
   static async create(body: Author): Promise<Author> {
