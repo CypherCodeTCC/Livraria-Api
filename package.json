@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon ./src/index.ts",
     "lint": "eslint . --ext .ts",
-    "build": "tsc --build"
+    "build": "npx prisma generate && tsc --build"
   },
   "keywords": [],
   "author": "",
